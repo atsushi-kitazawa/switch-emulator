@@ -24,10 +24,10 @@ class Switch {
         return true
     }
 
-    fun detachTerminal(terminal: Terminal): Boolean {
-        val port = table.findPortFromMacAddress(terminal.macAddress) ?: return false
+    fun detachTerminal(port: Int): Terminal? {
+        val terminal = table.getTerminalFromPort(port)
         table.updatePort(port, null)
-        return true
+        return terminal
     }
 
     fun proxy(fromMacAddress: String, toMacAddress: String, msg: String) {

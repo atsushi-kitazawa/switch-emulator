@@ -6,7 +6,35 @@ fun main() {
 }
 
 class Emulator {
+    private val switch = Switch()
     fun doExec() {
+        while (true) {
+            val input = readln()
+            when {
+                input.startsWith("connect") -> {
+                    val parts = input.split(" ")
+                    val port = parts.getOrNull(1)?.toIntOrNull() ?: continue
+                    val terminal = Terminal(MacAddressGenerator.generate())
+                    connect(terminal, switch, port)
+                    switch.printMacAddressTable()
+                }
+                input.startsWith("detach") -> {
+                    val parts = input.split(" ")
+                    val port = parts.getOrNull(1)?.toIntOrNull() ?: continue
+                    detach(switch, port)
+                    switch.printMacAddressTable()
+                }
+                input.startsWith("send") -> {}
+                (input == "exit") -> break
+                else -> {
+                    println(input)
+                }
+            }
+        }
+    }
+
+    // スイッチと端末の初期化を実施
+    private fun initSwitch() {
         val switch = Switch()
         val terminal1 = Terminal("7A:88:A4:0F:C5:D1")
         val terminal2 = Terminal("1A:DC:A4:56:0F:14")
@@ -29,8 +57,8 @@ class Emulator {
         connect(terminal4, switch, 1)
 
         // 端末1の切断
-        detach(terminal1, switch)
-        switch.printMacAddressTable()
+//        detach(terminal1, switch)
+//        switch.printMacAddressTable()
     }
 
     private fun connect(terminal: Terminal, switch: Switch, port: Int) {
@@ -38,8 +66,8 @@ class Emulator {
         terminal.connectSwitch(switch)
     }
 
-    private fun detach(terminal: Terminal, switch: Switch) {
-        switch.detachTerminal(terminal)
-        terminal.detachSwitch()
+    private fun detach(switch: Switch, port: Int) {
+        val terminal = switch.detachTerminal(port)
+        terminal?.detachSwitch()
     }
 }
