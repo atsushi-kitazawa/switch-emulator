@@ -57,7 +57,7 @@ detach <port number>
 Send a message from one port to another:
 
 ```
-send <from port number> <to port number> <msg>
+send <from mac address> <to mac address> <msg>
 ```
 
 *Example:* `send 1 2 Hello_World`

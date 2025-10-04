@@ -10,6 +10,7 @@ class Emulator {
     fun doExec() {
         while (true) {
             val input = readln()
+            // TODO コマンドのバリデーションが不十分
             when {
                 input.startsWith("connect") -> {
                     val parts = input.split(" ")
@@ -24,7 +25,13 @@ class Emulator {
                     detach(switch, port)
                     switch.printMacAddressTable()
                 }
-                input.startsWith("send") -> {}
+                input.startsWith("send") -> {
+                    val parts = input.split(" ")
+                    val from = parts.getOrNull(1) ?: return
+                    val to = parts.getOrNull(2) ?: return
+                    val msg = parts.getOrNull(3) ?: return
+                    switch.proxy(from, to, msg)
+                }
                 (input == "exit") -> break
                 else -> {
                     println(input)
