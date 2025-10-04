@@ -26,6 +26,10 @@ class Switch {
 
     fun detachTerminal(port: Int): Terminal? {
         val terminal = table.getTerminalFromPort(port)
+        if (terminal == null) {
+            println("port $port is not userd.")
+            return null
+        }
         table.updatePort(port, null)
         return terminal
     }
