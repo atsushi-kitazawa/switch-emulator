@@ -48,6 +48,14 @@ class Switch {
 
     /**
      * MACアドレステーブルを表現するクラス
+     *
+     * ex) mac address table
+     * terminal1                   | mac address1 | port1
+     * terminal2                   | mac address2 | port2
+     * switch-a                    | -            | port3
+     * terminal3(connect switch-a) | mac address3 | port3
+     * terminal4(connect switch-a) | mac address4 | port3
+     *
      */
     class MacAddressTable(ports: List<Int>) {
         private val table = mutableMapOf<Int, Terminal?>()
