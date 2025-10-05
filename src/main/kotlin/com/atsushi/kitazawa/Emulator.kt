@@ -7,7 +7,7 @@ fun main() {
 
 class Emulator {
     private val switch = Switch()
-    private var terminalList = mutableListOf<Computer>()
+    private var terminalList = mutableListOf<Terminal>()
     fun doExec() {
         while (true) {
             val input = readln()
@@ -77,12 +77,12 @@ class Emulator {
 //        switch.printMacAddressTable()
     }
 
-    private fun connect(terminal: Computer, switch: Switch, port: Int) {
+    private fun connect(terminal: Terminal, switch: Switch, port: Int) {
         switch.connectTerminal(port, terminal)
         terminal.connectSwitch(switch)
     }
 
-    private fun detach(switch: Switch, port: Int): Computer? {
+    private fun detach(switch: Switch, port: Int): Terminal? {
         val terminal = switch.detachTerminal(port)
         terminal?.detachSwitch()
         return terminal
