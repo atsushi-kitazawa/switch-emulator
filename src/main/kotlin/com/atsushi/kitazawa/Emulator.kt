@@ -7,6 +7,7 @@ fun main() {
 
 class Emulator {
     private val switch = Switch()
+    private var terminalList = mutableListOf<Computer>()
     fun doExec() {
         while (true) {
             val input = readln()
@@ -16,13 +17,15 @@ class Emulator {
                     val parts = input.split(" ")
                     val port = parts.getOrNull(1)?.toIntOrNull() ?: continue
                     val terminal = Computer(MacAddressGenerator.generate())
+                    terminalList.add(terminal)
                     connect(terminal, switch, port)
                     switch.printMacAddressTable()
                 }
                 input.startsWith("detach") -> {
                     val parts = input.split(" ")
                     val port = parts.getOrNull(1)?.toIntOrNull() ?: continue
-                    detach(switch, port)
+                    val terminal = detach(switch, port)
+                    if(terminal != null) terminalList.remove(terminal)
                     switch.printMacAddressTable()
                 }
                 input.startsWith("send") -> {
@@ -30,6 +33,12 @@ class Emulator {
                     val from = parts.getOrNull(1) ?: return
                     val to = parts.getOrNull(2) ?: return
                     val msg = parts.getOrNull(3) ?: return
+                    // 送信元の端末がスイッチに接続されている場合のみメッセージを送信する
+                    val index = terminalList.indexOf(Computer(from))
+                    if(index == -1 || !terminalList[index].isConnected()) {
+                        println("$from is not connected to switch.")
+                        continue
+                    }
                     switch.proxy(from, to, msg)
                 }
                 (input == "exit") -> break
@@ -73,8 +82,9 @@ class Emulator {
         terminal.connectSwitch(switch)
     }
 
-    private fun detach(switch: Switch, port: Int) {
+    private fun detach(switch: Switch, port: Int): Computer? {
         val terminal = switch.detachTerminal(port)
         terminal?.detachSwitch()
+        return terminal
     }
 }
