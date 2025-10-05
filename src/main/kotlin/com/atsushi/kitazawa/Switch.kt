@@ -1,8 +1,10 @@
 package com.atsushi.kitazawa
 
-class Switch {
+class Switch(override var macAddress: String) : Terminal {
     private val ports = listOf(1, 2, 3)
     private val table = MacAddressTable(ports)
+    private var switch: Switch? = null
+    private var isConnected: Boolean = false
 
     // TODO
     // スイッチは端末を知っていてよいか？
@@ -46,6 +48,26 @@ class Switch {
         println(table)
     }
 
+    override fun receive(fromMacAddress: String, toMacAddress: String, msg: String): Boolean {
+        TODO("proxyを呼ぶ")
+    }
+
+    override fun matchMacAddress(macAddress: String): Boolean {
+        return macAddress == this.macAddress
+    }
+    override fun connectSwitch(s: Switch) {
+        this.switch = s
+        isConnected = true
+    }
+
+    override fun detachSwitch() {
+        switch = null
+        isConnected = false
+    }
+
+    override fun isConnected(): Boolean {
+        return isConnected
+    }
     /**
      * MACアドレステーブルを表現するクラス
      *

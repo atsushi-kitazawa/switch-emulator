@@ -6,7 +6,7 @@ fun main() {
 }
 
 class Emulator {
-    private val switch = Switch()
+    private val switch = Switch(MacAddressGenerator.generate())
     private var terminalList = mutableListOf<Terminal>()
     fun doExec() {
         while (true) {
@@ -29,10 +29,13 @@ class Emulator {
                     switch.printMacAddressTable()
                 }
                 input.startsWith("send") -> {
+                    // TODO
+                    //  スイッチのproxyではなく、端末のsendメソッドを呼ぶように変えるべきを思う
                     val parts = input.split(" ")
                     val from = parts.getOrNull(1) ?: return
                     val to = parts.getOrNull(2) ?: return
                     val msg = parts.getOrNull(3) ?: return
+
                     // 送信元の端末がスイッチに接続されている場合のみメッセージを送信する
                     val index = terminalList.indexOf(Computer(from))
                     if(index == -1 || !terminalList[index].isConnected()) {
@@ -51,28 +54,28 @@ class Emulator {
 
     // スイッチと端末の初期化を実施
     private fun initSwitch() {
-        val switch = Switch()
-        val terminal1 = Computer("7A:88:A4:0F:C5:D1")
-        val terminal2 = Computer("1A:DC:A4:56:0F:14")
-        val terminal3 = Computer("48:99:B3:DA:1D:E9")
-
-        // 端末1の接続
-        connect(terminal1, switch, 1)
-        // 端末2の接続
-        connect(terminal2, switch, 2)
-        // 端末3の接続
-        connect(terminal3, switch, 3)
-        // アドレステーブルの表示
-        switch.printMacAddressTable()
-
-        // メッセージ送信（端末1->端末2）
-        terminal1.send("1A:DC:A4:56:0F:14", "hello!!")
-
-        // 利用中ポートへの接続（接続できない）
-        val terminal4 = Computer(MacAddressGenerator.generate())
-        connect(terminal4, switch, 1)
-
-        // 端末1の切断
+//        val switch = Switch()
+//        val terminal1 = Computer("7A:88:A4:0F:C5:D1")
+//        val terminal2 = Computer("1A:DC:A4:56:0F:14")
+//        val terminal3 = Computer("48:99:B3:DA:1D:E9")
+//
+//        // 端末1の接続
+//        connect(terminal1, switch, 1)
+//        // 端末2の接続
+//        connect(terminal2, switch, 2)
+//        // 端末3の接続
+//        connect(terminal3, switch, 3)
+//        // アドレステーブルの表示
+//        switch.printMacAddressTable()
+//
+//        // メッセージ送信（端末1->端末2）
+//        terminal1.send("1A:DC:A4:56:0F:14", "hello!!")
+//
+//        // 利用中ポートへの接続（接続できない）
+//        val terminal4 = Computer(MacAddressGenerator.generate())
+//        connect(terminal4, switch, 1)
+//
+//        // 端末1の切断
 //        detach(terminal1, switch)
 //        switch.printMacAddressTable()
     }
