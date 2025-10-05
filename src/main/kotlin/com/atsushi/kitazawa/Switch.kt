@@ -13,7 +13,7 @@ class Switch {
     // メッセージの送信側は受信側のMACアドレスを指定して送信する
     //
     // 端末が端末を知っているのはおかしい
-    fun connectTerminal(port: Int, terminal: Terminal): Boolean {
+    fun connectTerminal(port: Int, terminal: Computer): Boolean {
         // ポートが利用中の場合、接続しない
         if (table.isPortUsed(port)) {
             println("port $port is used. cannot connect.")
@@ -24,7 +24,7 @@ class Switch {
         return true
     }
 
-    fun detachTerminal(port: Int): Terminal? {
+    fun detachTerminal(port: Int): Computer? {
         val terminal = table.getTerminalFromPort(port)
         if (terminal == null) {
             println("port $port is not userd.")
@@ -58,7 +58,7 @@ class Switch {
      *
      */
     class MacAddressTable(ports: List<Int>) {
-        private val table = mutableMapOf<Int, Terminal?>()
+        private val table = mutableMapOf<Int, Computer?>()
 
         init {
             for (p in ports) {
@@ -66,7 +66,7 @@ class Switch {
             }
         }
 
-        fun updatePort(port: Int, terminal: Terminal?) {
+        fun updatePort(port: Int, terminal: Computer?) {
             if (port in table) {
                 table[port] = terminal
             }
@@ -80,7 +80,7 @@ class Switch {
             return filterMap.keys.firstOrNull()
         }
 
-        fun getTerminalFromPort(port: Int): Terminal? {
+        fun getTerminalFromPort(port: Int): Computer? {
             return table[port]
         }
 

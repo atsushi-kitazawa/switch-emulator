@@ -1,6 +1,6 @@
 package com.atsushi.kitazawa
 
-class Terminal(var macAddress: String) {
+class Computer(var macAddress: String) {
     private var switch: Switch? = null
 
     fun send(toMacAddress: String, msg: String) {
@@ -27,6 +27,6 @@ class Terminal(var macAddress: String) {
     }
 
     override fun toString(): String {
-        return "Terminal(macAddress=$macAddress)"
+        return "Computer(macAddress=$macAddress)"
     }
 }

@@ -15,7 +15,7 @@ class Emulator {
                 input.startsWith("connect") -> {
                     val parts = input.split(" ")
                     val port = parts.getOrNull(1)?.toIntOrNull() ?: continue
-                    val terminal = Terminal(MacAddressGenerator.generate())
+                    val terminal = Computer(MacAddressGenerator.generate())
                     connect(terminal, switch, port)
                     switch.printMacAddressTable()
                 }
@@ -43,9 +43,9 @@ class Emulator {
     // スイッチと端末の初期化を実施
     private fun initSwitch() {
         val switch = Switch()
-        val terminal1 = Terminal("7A:88:A4:0F:C5:D1")
-        val terminal2 = Terminal("1A:DC:A4:56:0F:14")
-        val terminal3 = Terminal("48:99:B3:DA:1D:E9")
+        val terminal1 = Computer("7A:88:A4:0F:C5:D1")
+        val terminal2 = Computer("1A:DC:A4:56:0F:14")
+        val terminal3 = Computer("48:99:B3:DA:1D:E9")
 
         // 端末1の接続
         connect(terminal1, switch, 1)
@@ -60,7 +60,7 @@ class Emulator {
         terminal1.send("1A:DC:A4:56:0F:14", "hello!!")
 
         // 利用中ポートへの接続（接続できない）
-        val terminal4 = Terminal(MacAddressGenerator.generate())
+        val terminal4 = Computer(MacAddressGenerator.generate())
         connect(terminal4, switch, 1)
 
         // 端末1の切断
@@ -68,7 +68,7 @@ class Emulator {
 //        switch.printMacAddressTable()
     }
 
-    private fun connect(terminal: Terminal, switch: Switch, port: Int) {
+    private fun connect(terminal: Computer, switch: Switch, port: Int) {
         switch.connectTerminal(port, terminal)
         terminal.connectSwitch(switch)
     }
